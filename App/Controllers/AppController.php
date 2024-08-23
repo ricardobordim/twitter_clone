@@ -48,13 +48,6 @@ class AppController extends Action
         $tweet->salvar();
 
         header(('Location:/timeline'));
-
-
-
-
-
-           
-
         // print_r($_POST);
     }
 
@@ -65,6 +58,30 @@ class AppController extends Action
         if (!isset($_SESSION['id']) || $_SESSION['id'] == '' |  !isset($_SESSION['nome']) ||  $_SESSION['id']== '') {
             header('Location:/?login=erro');
         } 
+    }
+
+    public function quemSeguir(){
+        $this->validaAutenticacao();
+        // echo 'oi';
+
+        $pesquisarPor = isset($_GET['pesquisarPor']) ? $_GET['pesquisarPor'] : '';
+
+        $usuarios= array();
+
+        if ($pesquisarPor !=''){
+            // retorna o objeto com a conexão estabelecida
+            $usuario = Container::getModel('Usuario');
+            $usuario->__set('nome', $pesquisarPor);
+            $usuarios = $usuario->getAll();
+            
+
+        }
+
+        $this->view->usuarios = $usuarios;
+        
+        // print_r($_GET);
+        $this->render('quemSeguir');
+
 
     }
 }
