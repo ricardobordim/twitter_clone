@@ -24,13 +24,34 @@ class AppController extends Action
         $tweet = Container::getModel('Tweet');
 
         $tweet->__set('id_usuario',$_SESSION['id']);
-        $tweets = $tweet->getAll();
+
+        // variáveis de paginação
+        $total_registros_pagina = 10;
+        $deslocamento = 0;
+        $pagina = 1;
+
+        // $tweets = $tweet->getAll();
+        
+         $tweets = $tweet->getPorPagina($total_registros_pagina, $deslocamento);
+
+
+
         // print_r($tweets);
 
         // atributo dinâmico
         $this->view->tweets = $tweets;
 
-        $this->render('timeline');
+
+
+
+
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id',$_SESSION['id']);
+        
+        $this->view->usuario = $usuario->getTotal();
+
+        // print_r($this->view->usuario);
+         $this->render('timeline');
 
     }
     public function tweet(){
@@ -72,16 +93,56 @@ class AppController extends Action
             // retorna o objeto com a conexão estabelecida
             $usuario = Container::getModel('Usuario');
             $usuario->__set('nome', $pesquisarPor);
+            $usuario->__set('id',$_SESSION['id']);
             $usuarios = $usuario->getAll();
             
 
         }
 
         $this->view->usuarios = $usuarios;
+
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id', $_SESSION['id']);
+        $this->view->info_usuario = $usuario->getTotal();
         
         // print_r($_GET);
         $this->render('quemSeguir');
 
+
+    }
+
+    public function acao(){
+        $this->validaAutenticacao();
+
+        // print_r($_GET);
+        $acao = isset($_GET['acao']) ? $_GET['acao'] : '';
+        $id_usuario_seguindo = isset($_GET['id_usuario']) ? $_GET['id_usuario'] : '';
+
+        // usando a classe usuario por facilidade nao por ser o ideal
+        $usuario = Container::getModel('Usuario');
+
+        // Pegando o id do usuario da sessao
+        $usuario->__set('id',$_SESSION['id']);
+
+        if($acao=='seguir'){
+            $usuario->seguirUsuario($id_usuario_seguindo);
+
+        }
+        elseif ($acao == 'deixar_de_seguir') {
+            $usuario->deixarSeguirUsuario($id_usuario_seguindo);
+            
+        }
+        header("Location:/quem_seguir");
+
+    }
+
+    public function remover_tweet(){
+        $this->validaAutenticacao();
+        $tweet = Container::getModel('Tweet');
+        $tweet->__set('id_tweet', $_GET['id_tweet']);
+        $tweet->remover();
+
+        header(('Location:/timeline'));
 
     }
 }

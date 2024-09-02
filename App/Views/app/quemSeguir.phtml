@@ -1,21 +1,21 @@
 <nav class="navbar navbar-expand-lg menu">
 	<div class="container">
-	  <div class="navbar-nav">
-	  	<a class="menuItem" href="/timeline">
-	  		Home
-	  	</a>
+		<div class="navbar-nav">
+			<a class="menuItem" href="/timeline">
+				Home
+			</a>
 
-	  	<a class="menuItem" href="/sair">
-	  		Sair
-	  	</a>
+			<a class="menuItem" href="/sair">
+				Sair
+			</a>
 			<img src="/img/twitter_logo.png" class="menuIco" />
-	  </div>
+		</div>
 	</div>
 </nav>
 
 <div class="container mt-5">
 	<div class="row pt-2">
-		
+
 		<div class="col-md-3">
 
 			<div class="perfil">
@@ -24,10 +24,10 @@
 				</div>
 
 				<div class="perfilPainel">
-					
+
 					<div class="row mt-2 mb-2">
 						<div class="col mb-2">
-							<span class="perfilPainelNome">Nome do Usuário</span>
+							<span class="perfilPainelNome"><?= $this->view->info_usuario['nome'] ?></span>
 						</div>
 					</div>
 
@@ -35,17 +35,17 @@
 
 						<div class="col">
 							<span class="perfilPainelItem">Tweets</span><br />
-							<span class="perfilPainelItemValor">0</span>
+							<span class="perfilPainelItemValor"><?= $this->view->info_usuario['total_tweet'] ?></span>
 						</div>
 
 						<div class="col">
 							<span class="perfilPainelItem">Seguindo</span><br />
-							<span class="perfilPainelItemValor">0</span>
+							<span class="perfilPainelItemValor"><?= $this->view->info_usuario['total_seguindo'] ?></span>
 						</div>
 
 						<div class="col">
 							<span class="perfilPainelItem">Seguidores</span><br />
-							<span class="perfilPainelItemValor">0</span>
+							<span class="perfilPainelItemValor"><?= $this->view->info_usuario['total_seguidores'] ?></span>
 						</div>
 
 					</div>
@@ -56,7 +56,7 @@
 		</div>
 
 		<div class="col-md-6">
-			
+
 			<div class="row mb-2">
 				<div class="col">
 					<div class="card">
@@ -74,7 +74,7 @@
 				</div>
 			</div>
 
-			<?php foreach($this->view->usuarios as $indice_arr => $usuario) { ?>
+			<?php foreach ($this->view->usuarios as $indice_arr => $usuario) { ?>
 				<div class="row mb-2">
 					<div class="col">
 						<div class="card">
@@ -82,12 +82,16 @@
 								<div class="row">
 									<div class="col-md-6">
 										<?= $usuario['nome'] ?>
+
 									</div>
-								
+
 									<div class="col-md-6 d-flex justify-content-end">
 										<div>
-											<a href="#" class="btn btn-success">Seguir</a>
-											<a href="#" class="btn btn-danger">Deixar de seguir</a>
+											<?php if ($usuario['seguindo_sn'] == 0): ?>
+												<a href="/acao?acao=seguir&id_usuario=<?= $usuario['id'] ?>" class="btn btn-success">Seguir</a>
+											<?php else: ?>
+												<a href="/acao?acao=deixar_de_seguir&id_usuario=<?= $usuario['id'] ?>" class="btn btn-danger">Deixar de seguir</a>
+											<?php endif ?>
 										</div>
 									</div>
 								</div>
