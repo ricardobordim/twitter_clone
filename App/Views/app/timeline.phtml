@@ -89,16 +89,17 @@
 			<div class="row mt-5">
 				<nav aria-label="...">
 					<ul class="pagination">
-						<li class="page-item disabled">
-							<a class="page-link" href="#" tabindex="-1">Previous</a>
-						</li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item active">
-							<a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-						</li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
 						<li class="page-item">
-							<a class="page-link" href="#">Next</a>
+							<a class="page-link" href="?pagina=1" tabindex="-1">Primeira</a>
+						</li>
+						<?php for ($i = 1; $i <=  $this->view->total_de_paginas; $i++): ?>
+							<li  class="page-item 	<?= $this->view->pagina_ativa == $i ? 'active' : '' ?>">
+								<a class="page-link " href="?pagina=<?= $i ?>" tabindex="-1"><?= $i ?></a>
+							</li>
+						<?php endfor; ?>
+
+						<li class="page-item">
+							<a class="page-link" href="?pagina=<?= $this->view->total_de_paginas ?>">Última </a>
 						</li>
 					</ul>
 				</nav>

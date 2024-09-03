@@ -28,15 +28,24 @@ class AppController extends Action
         // variáveis de paginação
         $total_registros_pagina = 10;
         $deslocamento = 0;
-        $pagina = 1;
-
-        // $tweets = $tweet->getAll();
         
+        // Se vier a variável pela super global $_GET, atribui a pagina senão é a primeira
+        $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+
+        $deslocamento = ($pagina-1) * $total_registros_pagina;
+
+        // echo ('Deslocamento : ' . $deslocamento . ' pagina:' . $pagina . ' total: ' . $total_registros_pagina);
+
          $tweets = $tweet->getPorPagina($total_registros_pagina, $deslocamento);
 
+         $total_tweets = $tweet->getTotalRegistros();
+        
+         //  Criando a variavel dinamicamente
+         $this->view->total_de_paginas = ceil($total_tweets['total']/$total_registros_pagina);
+         $this->view->pagina_ativa = $pagina;
 
+        //  print_r($total_paginas);
 
-        // print_r($tweets);
 
         // atributo dinâmico
         $this->view->tweets = $tweets;
